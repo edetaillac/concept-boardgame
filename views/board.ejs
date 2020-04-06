@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Online Concept BoardGame</title>
+        <link rel="stylesheet" href="static/css/style.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/image/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/image/favicon-16x16.png">
+    </head>
+ 
+    <body>
+
+        <% defaultPosition.forEach(pawn => { %>
+            <% for(var i=0; i<pawn.number; i++) { %>
+                <% if (pawn.symbol !== undefined) { %>
+                    <div id="<%= pawn.id %><%= i %>" class="draggable <%= pawn.color %> typo"><%= pawn.symbol %></div>
+                <% } else { %>
+                    <div id="<%= pawn.id %><%= i %>" class="cube draggable <%= pawn.color %>">
+                        <div class="side top <%= pawn.color %>"></div>
+                        <div class="side left <%= pawn.color %>"></div>
+                        <div class="side front <%= pawn.color %>"></div>
+                    </div>
+                <% } %>
+            <% } %>    
+        <% }); %>
+
+        <div id="reset">
+            <div class="wordlist"></div>
+            <button>Démarrer une partie</button>
+            <div id="readme">
+                Vous pouvoir consulter ici la <a href="/static/pdf/help.pdf" target="_blank">légende</a>
+                ou les <a href="/static/pdf/regle.pdf" target="_blank">règles du jeu</a>.
+            </div>
+        </div>
+
+        <!-- Javascript -->
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        
+        <script>
+            var socket = io.connect('localhost:8080');
+
+            function initPositions() {
+                resetPositions();
+                <% positionDiv.forEach(pawn => { %>
+                    $("#<%= pawn.pawn %>").css({left:<%= pawn.x  %>, top:<%= pawn.y%>}); 
+                <% }); %>
+            }
+
+            function resetPositions() {
+                <% defaultPosition.forEach(pawn => { %>
+                    <% for(var i=0; i<pawn.number; i++) { %>
+                        $("#<%= pawn.id %><%= i %>").css({left:<%= pawn.x  %>, top:<%= pawn.y + i * 30 %>});
+                    <% } %>  
+                <% }); %>
+            }
+ 
+            $(function() {
+
+                initPositions();
+
+                $( "#reset button").click(function(){
+                    $.ajax("/word").done(function(data) {
+                      $('#reset .wordlist').html('<ul><li>'+data.word1+'</li><li>'+data.word2+'</li><li>'+data.word3+'</li><li>'+data.word4+'</li><li>'+data.word5+'</li><li>'+data.word6+'</li></ul>');
+                    }).fail(function(data){
+                      alert("An error occured. Try again !");
+                    });
+
+                    resetPositions();
+                    socket.emit('resetGame');
+                });
+                
+                $( ".draggable" ).draggable({
+                    drag: function(event, ui) {
+                        var position = $(this).position();
+                        socket.emit('movePawn', {position: position, pawn: event.target.id});
+                    },
+                    stop: function(event, ui) {
+                        var position = $(this).position();
+                        socket.emit('stopPawn', {position: position, pawn: event.target.id});
+                    },
+                });
+
+                socket.on('movePawn', function(data) {
+                    $('#'+data.pawn).css({left:data.position.left+3,top:data.position.top-3})
+                });
+
+                socket.on('resetGame', function(positionDiv) {
+                    $('#reset .wordlist').html('<ul><li>Une partie vient de démarrer !</li></ul>');
+                    resetPositions();
+                });
+            });
+ 
+        </script>
+    </body>
+</html>
