@@ -2,7 +2,7 @@
   "name": "concept-boardgame",
   "version": "0.1.0",
   "dependencies": {
-    "ejs": "1.x",
+    "ejs": "2.x",
     "ent": "2.x",
     "express": "4.x",
     "socket.io": "1.x"
