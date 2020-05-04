@@ -5,10 +5,10 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: concept
-    port:
-      - "8080:8080"
     volumes:
       - "./app.js:/usr/src/app/app.js"
       - "./public:/usr/src/app/public"
       - "./views:/usr/src/app/views"
       - "./words:/usr/src/app/words"
+    ports:
+      - "8080:8080"

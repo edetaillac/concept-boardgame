@@ -12,16 +12,16 @@ const wordAdultes = fs.readFileSync('words/adultes.csv','utf8').split("\r\n");
  
 app.use(function(req, res, next){
     defaultPositionDiv = [
-        {id: 'typo-green', color: 'green', x:800, y:80, number: 1, symbol: '?'},
-        {id: 'green', color: 'green', x:808, y:150, number: 8},
-        {id: 'typo-magenta',color: 'magenta', x:850, y:80, number: 1, symbol: '!'},
-        {id: 'magenta',color: 'magenta', x:858, y:150, number: 6},
-        {id: 'typo-yellow',color: 'yellow', x:900, y:80, number: 1, symbol: '!'},
-        {id: 'yellow',color: 'yellow', x:908, y:150, number: 6 },
-        {id: 'typo-black',color: 'black', x:950, y:80 , number: 1, symbol: '!'},
-        {id: 'black',color: 'black', x:958, y:150 , number: 6},
-        {id: 'typo-blue',color: 'blue', x:1000, y:80, number: 1, symbol: '!'},
-        {id: 'blue', color: 'blue', x:1008, y:150, number: 6},
+        {id: 'typo-green', color: 'green', x:800, y:70, number: 1, symbol: '?'},
+        {id: 'green', color: 'green', x:808, y:120, number: 8},
+        {id: 'typo-magenta',color: 'magenta', x:850, y:70, number: 1, symbol: '!'},
+        {id: 'magenta',color: 'magenta', x:858, y:120, number: 6},
+        {id: 'typo-yellow',color: 'yellow', x:900, y:70, number: 1, symbol: '!'},
+        {id: 'yellow',color: 'yellow', x:908, y:120, number: 6 },
+        {id: 'typo-black',color: 'black', x:950, y:70 , number: 1, symbol: '!'},
+        {id: 'black',color: 'black', x:958, y:120 , number: 6},
+        {id: 'typo-blue',color: 'blue', x:1000, y:70, number: 1, symbol: '!'},
+        {id: 'blue', color: 'blue', x:1008, y:120, number: 6},
     ];
     if (typeof(positionDiv) == 'undefined') {
         positionDiv = [];
